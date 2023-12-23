@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchangefront;
+package com.kodilla.currencyexchangefront.calculateAmount;
 
 import lombok.Getter;
 import lombok.Setter;

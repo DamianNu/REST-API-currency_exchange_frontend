@@ -1,4 +1,4 @@
-package com.kodilla.currencyexchangefront;
+package com.kodilla.currencyexchangefront.calculateAmount;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

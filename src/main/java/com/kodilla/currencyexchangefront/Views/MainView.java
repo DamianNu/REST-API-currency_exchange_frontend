@@ -1,7 +1,7 @@
 package com.kodilla.currencyexchangefront.Views;
 
-import com.kodilla.currencyexchangefront.Currency;
-import com.kodilla.currencyexchangefront.CurrencyClient;
+import com.kodilla.currencyexchangefront.currency.Currency;
+import com.kodilla.currencyexchangefront.currency.CurrencyClient;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

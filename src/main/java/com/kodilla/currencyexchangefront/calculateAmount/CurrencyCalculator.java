@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 public class CurrencyCalculator {
     RestTemplate restTemplate = new RestTemplate();
     CalculateAmount calculateAmount = new CalculateAmount();
+
     public double sendRequestCalculation(String code, String type, double amount) {
         calculateAmount.setCode(code);
         calculateAmount.setType(type);

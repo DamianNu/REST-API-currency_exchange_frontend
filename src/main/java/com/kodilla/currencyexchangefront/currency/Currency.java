@@ -8,13 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Currency {
-
     private String code;
-
     private String currency;
-
     private double buying;
-
     private double selling;
-
 }

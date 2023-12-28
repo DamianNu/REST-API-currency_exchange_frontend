@@ -2,12 +2,14 @@ package com.kodilla.currencyexchangefront.Views;
 
 import com.kodilla.currencyexchangefront.registration.Registration;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,6 +20,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
+import java.util.concurrent.TimeUnit;
+
 @PageTitle("Wymiana Walut")
 @Route(value = "registration")
 @Uses(Icon.class)
@@ -25,7 +29,7 @@ public class RegistrationView extends Composite<VerticalLayout> {
 
     Registration registration = new Registration();
 
-    public RegistrationView() {
+    public RegistrationView() throws InterruptedException {
         VerticalLayout layoutColumn3 = new VerticalLayout();
         HorizontalLayout layoutRow = new HorizontalLayout();
         VerticalLayout layoutColumn4 = new VerticalLayout();
@@ -106,10 +110,17 @@ public class RegistrationView extends Composite<VerticalLayout> {
 
             boolean result = registration.registration(login, email, password);
             if(result) {
-                textInfo.setText(" rejestracja udana !");
+                Notification.show("Pomyślnie zarejestrowano");
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                UI.getCurrent().navigate("v1");
 
             } else {
                 textInfo.setText(" rejestracja nieudana !");
+                Notification.show("Rejestracja nieudana");
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.kodilla.currencyexchangefront.Views;
 
+import com.kodilla.currencyexchangefront.bayingAmmount.CurrencyBaying;
 import com.kodilla.currencyexchangefront.currency.Currency;
 import com.kodilla.currencyexchangefront.calculateAmount.CurrencyCalculator;
 import com.kodilla.currencyexchangefront.currency.CurrencyClient;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -38,6 +40,8 @@ public class CalculateView extends Composite<VerticalLayout> {
     private CurrencyCalculator currencyCalculator = new CurrencyCalculator();
     private MainView mainView = new MainView();
 
+    private CurrencyBaying currencyBaying = new CurrencyBaying();
+
     public CalculateView() throws URISyntaxException {
 
 
@@ -49,6 +53,7 @@ public class CalculateView extends Composite<VerticalLayout> {
         Button buttonMV = new Button();
         Button buttonCalculateView = new Button();
         Button buttonResult = new Button();
+        Button buttonBaying = new Button();
         Grid<Currency> basicGrid = new Grid<>();
         VerticalLayout layoutColumn3 = new VerticalLayout();
         H2 h2 = new H2();
@@ -104,6 +109,10 @@ public class CalculateView extends Composite<VerticalLayout> {
         buttonResult.setWidth("100px");
         buttonResult.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
 
+        buttonBaying.setText("Zakup");
+        buttonBaying.setWidth("100px");
+        buttonBaying.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
+
         layoutColumn3.setWidth("100%");
         layoutColumn3.getStyle().set("flex-grow", "1");
         h2.setText("Kalkulator Waluty");
@@ -148,6 +157,7 @@ public class CalculateView extends Composite<VerticalLayout> {
         layoutRow3.add(radioGroup);
         layoutRow3.add(buttonResult);
         layoutRow3.add(resultCurr);
+        layoutRow3.add(buttonBaying);
 
         layoutColumn3.add(basicGrid);
 
@@ -169,19 +179,36 @@ public class CalculateView extends Composite<VerticalLayout> {
             double amount = numberField.getValue();
 
             double result = currencyCalculator.sendRequestCalculation(code, type, amount);
-            resultCurr.setText(result + " " + code);
+            resultCurr.setText(result + " " + "PLN");
+        });
+
+        buttonBaying.addClickListener(event -> {
+            String currencyCode = (String) comboBox.getValue();
+            String operationType = (String) radioGroup.getValue();
+            double amount = numberField.getValue();
+            double purchaseRate = client.getCurrencyByCode(currencyCode, operationType);
+            ;
+            double purchaseAmount = currencyCalculator.sendRequestCalculation(currencyCode, operationType, amount);
+            currencyBaying.sendRequestBaying(currencyCode, operationType, amount, purchaseRate, purchaseAmount);
+            if (operationType.equals("buying")) {
+                Notification.show("Zakupiono " + amount + " " + currencyCode + " za kwotę: " + purchaseAmount + " PLN");
+            } else {
+                Notification.show("Sprzedano " + amount + " " + currencyCode + " za kwotę: " + purchaseAmount + " PLN");
+            }
+            Notification.show("Dziękujemy za zakupy! \n Zapraszamy ponownie!");
+            numberField.setValue(0.0);
+            comboBox.setValue(" ");
         });
     }
 
     private void setComboBoxSampleData(ComboBox comboBox) {
-        List<Currency> currencyList = client.getCurrency();
+        List<Currency> currencyList = client.getCurrencyList();
         List<String> listCode = new ArrayList<>();
 
         for (int i = 0; i < currencyList.size(); i++) {
             String code = currencyList.get(i).getCode();
             listCode.add(code);
         }
-
         comboBox.setItems(listCode);
     }
 }

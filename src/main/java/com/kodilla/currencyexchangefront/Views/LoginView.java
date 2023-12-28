@@ -1,40 +1,49 @@
 package com.kodilla.currencyexchangefront.Views;
 
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.login.LoginForm;
+import com.kodilla.currencyexchangefront.login.LoginUser;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 @Route("login")
 @PageTitle("Login | Wymiana Walut")
-@AnonymousAllowed
-public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+public class LoginView extends VerticalLayout {
+    RestTemplate restTemplate = new RestTemplate();
+    private TextField username;
+    private PasswordField password;
 
-    private final LoginForm login = new LoginForm();
+    public LoginView() {
+        username = new TextField("Nazwa użytkownika");
+        password = new PasswordField("Hasło");
 
-    public LoginView(){
-        addClassName("login-view");
-        setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+        add(username, password);
 
-        login.setAction("login");
+        Button loginButton = new Button("Zaloguj");
+        loginButton.addClickListener(event -> {
+            String usernameValue = username.getValue();
+            String passwordValue = password.getValue();
 
-        add(new H1("Logowanie"), login);
-    }
+            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/login", new LoginUser(usernameValue,passwordValue), String.class);
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        // inform the user about an authentication error
-        if(beforeEnterEvent.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-            login.setError(true);
-        }
+            boolean success = response.getStatusCode().is2xxSuccessful();
+
+            System.out.println(success);
+
+            if (success) {
+                Notification.show("Logowanie pomyślne!");
+                UI.getCurrent().navigate("v1");
+            } else {
+                Notification.show("Niepoprawna nazwa użytkownika lub hasło");
+            }
+        });
+
+        add(loginButton);
     }
 }

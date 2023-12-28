@@ -59,12 +59,12 @@ public class MainView extends Composite<VerticalLayout> {
         layoutRow.setAlignSelf(FlexComponent.Alignment.END, buttonRe);
         buttonRe.setWidth("min-content");
         buttonRe.setHeight("26px");
-        buttonRe.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
+        buttonRe.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
         buttonLog.setText("Logowanie");
         layoutRow.setAlignSelf(FlexComponent.Alignment.END, buttonLog);
         buttonLog.setWidth("min-content");
         buttonLog.setHeight("26px");
-        buttonLog.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
+        buttonLog.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
 
         buttonCalculateView.setText("Kalkulator Waluty");
         buttonCalculateView.setWidth("100%");
@@ -82,7 +82,7 @@ public class MainView extends Composite<VerticalLayout> {
 
         buttonMV.setText("Strona Główna");
         buttonMV.setWidth("100%");
-        buttonMV.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
+        buttonMV.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
 
         layoutColumn3.setWidth("100%");
         layoutColumn3.getStyle().set("flex-grow", "1");
@@ -115,7 +115,7 @@ public class MainView extends Composite<VerticalLayout> {
     }
 
     public void setGridSampleData(Grid<Currency> basicGrid) {
-        List<Currency> a = client.getCurrency();
+        List<Currency> a = client.getCurrencyList();
 
         basicGrid.setItems(a);
         basicGrid.addColumn(Currency::getCode).setHeader("kod waluty");
